@@ -16,7 +16,7 @@ class RuleStore:
         self.has_been_initialized = False
 
         self.groups_by_name = {}
-        # Inverted index so we can quickly find which groups a user is a member of 
+        # Inverted index so we can quickly find which groups a user is a member of
         self.group_names_by_member = defaultdict(list)
 
         self.rules = []

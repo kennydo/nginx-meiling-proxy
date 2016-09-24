@@ -42,7 +42,7 @@ def parse_rule(raw_rule: Dict[str, Any]) -> models.AccessRule:
     _require_keys_in_dict(required_keys, "Rule", raw_rule)
 
     if not isinstance(raw_rule['allow'], bool):
-        raise InvalidConfig("Rule 'allow' value must be a bool: {0}".format(raw_group['allow']))
+        raise InvalidConfig("Rule 'allow' value must be a bool: {0}".format(raw_rule['allow']))
 
     return models.AccessRule(
         host=re.compile(raw_rule['host']),

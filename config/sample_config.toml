@@ -2,6 +2,9 @@ DEBUG = false
 TESTING = false
 SECRET_KEY = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+GOOGLE_OAUTH_CONSUMER_KEY = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.googleusercontent.com"
+GOOGLE_OAUTH_CONSUMER_SECRET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
 [logging]
 version = 1
 disable_existing_loggers = false

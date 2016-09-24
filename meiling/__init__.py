@@ -6,7 +6,7 @@ from typing import (
 )
 
 import toml
-from flask import Flask, request
+from flask import Flask
 
 from meiling.rule_engine.store import RuleStore
 
@@ -48,10 +48,8 @@ def create_app() -> Flask:
     def index():
         return 'OK'
 
-    @app.route('/auth')
-    def print_auth():
-        output = repr(request.headers)
-        print(output)
-        return output
+    from meiling.oauth import oauth_bp
+
+    app.register_blueprint(oauth_bp, url_prefix='/oauth')
 
     return app
