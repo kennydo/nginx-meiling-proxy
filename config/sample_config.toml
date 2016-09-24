@@ -1,0 +1,46 @@
+DEBUG = false
+TESTING = false
+SECRET_KEY = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+[logging]
+version = 1
+disable_existing_loggers = false
+
+[logging.formatters.verbose]
+format = "%(levelname)s %(asctime)s %(module)s [%(process)d] %(message)s"
+
+[logging.handlers.console]
+level = "INFO"
+class = "logging.StreamHandler"
+formatter = "verbose"
+
+[logging.loggers.meiling]
+handlers = ["console"]
+level = "INFO"
+
+[[rule_store.groups]]
+name = "admin"
+members = [
+    "chinesedewey@gmail.com",
+]
+
+[[rule_store.groups]]
+name = "imoutos"
+members = [
+    "lastorder@example.com",
+    "misaka1234@example.com",
+]
+
+[[rule_store.rules]]
+host = ".*"
+request_method = ".*"
+request_uri = ".*"
+group = "admin"
+allow = true
+
+[[rule_store.rules]]
+host = "^(plex|grafana).example.com$"
+request_method = ".*"
+request_uri = ".*"
+group = "imoutos"
+allow = true
