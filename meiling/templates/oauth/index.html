@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+Meiling OAuth Status
+{% endblock %}
+
+{% block content %}
+{% if user %}
+    <div class="row">
+        <div class="page-header">
+            {% if user['name'] %}
+                <h1>Hello, {{ user['name'] }}</h1>
+            {% else %}
+                <h1>Hello, {{ user['email'] }}</h1>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        You are logged in as <mark>{{ user['email'] }}</mark>.
+    </div>
+    <div class="row">
+        Not you? <a href="{{ url_for('.logout') }}" class="btn btn-warning">Log Out</a>
+    </div>
+{% else %}
+    <div class="row">
+        <div class="page-header">
+            <h1>Welcome to the Meiling Nginx Proxy</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        You are not logged in.
+    </div>
+    <div class="row">
+        <a href="{{ url_for('.login') }}" class="btn btn-success">Log In</a>
+    </div>
+{% endif %}
+{% endblock %}

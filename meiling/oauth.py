@@ -7,6 +7,7 @@ from flask import (
     Blueprint,
     flash,
     redirect,
+    render_template,
     request,
     session,
     url_for,
@@ -43,7 +44,10 @@ def initialize_google_oauth(setup_state):
 
 @oauth_bp.route('/')
 def index():
-    return str(session.get('google_user', 'no google user'))
+    return render_template(
+        'oauth/index.html',
+        user=session.get('google_user'),
+    )
 
 
 @oauth_bp.route('/login')
