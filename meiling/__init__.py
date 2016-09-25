@@ -7,6 +7,7 @@ from typing import (
 
 import toml
 from flask import Flask
+from werkzeug.contrib.fixers import ProxyFix
 
 from meiling.rule_engine.store import RuleStore
 
@@ -32,6 +33,7 @@ def load_config_from_env_var_path(env_var_name: str) -> Dict[str, Any]:
 
 def create_app() -> Flask:
     app = Flask(__name__)
+    app.wsgi_app = ProxyFix(app.wsgi_app)
 
     config_from_env_var = load_config_from_env_var_path(MEILING_CONFIG_ENV_VAR_NAME)
     app.config.update(config_from_env_var)
@@ -44,12 +46,10 @@ def create_app() -> Flask:
 
     rule_db.load_config(app.config['rule_store'])
 
-    @app.route('/')
-    def index():
-        return 'OK'
-
     from meiling.oauth import oauth_bp
-
     app.register_blueprint(oauth_bp, url_prefix='/oauth')
+
+    from meiling.nginx import nginx_bp
+    app.register_blueprint(nginx_bp, url_prefix='/nginx')
 
     return app

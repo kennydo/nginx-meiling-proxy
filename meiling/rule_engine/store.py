@@ -45,8 +45,26 @@ class RuleStore:
         log.info("Successfully loaded %d groups: %s", len(self.groups_by_name), ", ".join(self.groups_by_name.keys()))
         log.info("Successfully loaded %d rules", len(self.rules))
 
-    def has_access(self, request_context: 'RequestContnext') -> bool:
+        self.has_been_initialized = True
+
+    def does_rule_match_request_context(self, rule: 'AccessRule', request_context: 'RequestContext') -> bool:
+        if not rule.host.match(request_context.host):
+            return False
+
+        if not rule.request_method.match(request_context.request_method):
+            return False
+
+        if not rule.request_uri.match(request_context.request_uri):
+            return False
+
+        return rule.group in self.group_names_by_member.get(request_context.user_email)
+
+    def has_access(self, request_context: 'RequestContext') -> bool:
         if not self.has_been_initialized:
             raise UninitializedRuleStore("Cannot use un-initialized rule store")
 
-        pass
+        for rule in self.rules:
+            if self.does_rule_match_request_context(rule, request_context):
+                return rule.allow
+
+        return False

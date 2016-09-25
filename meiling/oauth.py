@@ -74,13 +74,13 @@ def login():
 def logout():
     session.pop('google_token', None)
     session.pop('google_user', None)
-    return redirect(url_for('index'))
+    return redirect(url_for('.index'))
 
 
 @oauth_bp.route('/login/authorized')
 def authorized():
     resp = oauth_bp.google.authorized_response()
-    next_url = session.pop('next_url', url_for('index'))
+    next_url = session.pop('next_url', url_for('.index'))
 
     if resp is None:
         flash("You didn't sign in.")
