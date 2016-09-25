@@ -15,12 +15,15 @@ NGINX_HOST = "X-Nginx-Host"
 NGINX_REQUEST_METHOD = "X-Nginx-Request-Method"
 NGINX_REQUEST_URI = "X-Nginx-Request-Uri"
 
+# The header we provide back to nginx
+MEILING_USER = "X-Meiling-User"
+
 log = logging.getLogger(__name__)
 nginx_bp = Blueprint('nginx_bp', __name__)
 
 
-def create_200_response():
-    return Response("", 200)
+def create_200_response(meiling_user: str):
+    return Response("", 200, {MEILING_USER: meiling_user})
 
 
 def create_401_response():
@@ -65,7 +68,7 @@ def auth_request():
     )
 
     if rule_db.has_access(context):
-        return create_200_response()
+        return create_200_response(user['email'])
 
     log.warn("Request deemed unauthorized: %s", context)
     return create_403_response()
