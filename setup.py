@@ -1,4 +1,7 @@
-from setuptools import setup
+from setuptools import (
+    find_packages,
+    setup,
+)
 
 
 setup(
@@ -13,9 +16,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Topic :: Internet',
     ],
-    packages=[
-        'meiling',
-    ],
+    packages=find_packages(exclude=['tests']),
     entry_points={
         'console_scripts': [
         ],
