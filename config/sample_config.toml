@@ -1,6 +1,8 @@
 DEBUG = false
 TESTING = false
 SECRET_KEY = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+SESSION_COOKIE_NAME = "meiling_session"
+SESSION_COOKIE_DOMAIN = "yourdomainhere.net"
 
 GOOGLE_OAUTH_CONSUMER_KEY = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.googleusercontent.com"
 GOOGLE_OAUTH_CONSUMER_SECRET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
