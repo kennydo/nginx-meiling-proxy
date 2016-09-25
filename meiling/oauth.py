@@ -24,7 +24,8 @@ def initialize_google_oauth(setup_state):
         'google',
         app_key='GOOGLE',
         request_token_params={
-            'scope': 'https://www.googleapis.com/auth/userinfo.email'
+            'scope': 'email',
+            'prompt': 'select_account',
         },
         base_url='https://www.googleapis.com/oauth2/v1/',
         request_token_url=None,
