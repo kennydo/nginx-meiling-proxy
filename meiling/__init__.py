@@ -6,7 +6,11 @@ from typing import (
 )
 
 import toml
-from flask import Flask
+from flask import (
+    Flask,
+    redirect,
+    url_for,
+)
 from werkzeug.contrib.fixers import ProxyFix
 
 from meiling.rule_engine.store import RuleStore
@@ -51,5 +55,9 @@ def create_app() -> Flask:
 
     from meiling.nginx import nginx_bp
     app.register_blueprint(nginx_bp, url_prefix='/nginx')
+
+    @app.route('/')
+    def redirect_to_oauth_index():
+        return redirect(url_for('oauth_bp.index'))
 
     return app
