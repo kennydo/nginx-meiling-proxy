@@ -1,3 +1,4 @@
+import logging
 from urllib.parse import (
     unquote,
     urlparse,
@@ -12,9 +13,13 @@ from flask import (
     session,
     url_for,
 )
-from flask_oauthlib.client import OAuth
+from flask_oauthlib.client import (
+    OAuth,
+    OAuthException,
+)
 
 
+log = logging.getLogger(__name__)
 oauth_bp = Blueprint('oauth_bp', __name__)
 
 
@@ -44,9 +49,22 @@ def initialize_google_oauth(setup_state):
 
 @oauth_bp.route('/')
 def index():
+    if 'google_user' in session:
+        user = session['google_user']
+
+        is_logged_in = True
+        user_name = user['name']
+        user_email = user['email']
+    else:
+        is_logged_in = False
+        user_name = None
+        user_email = None
+
     return render_template(
         'oauth/index.html',
-        user=session.get('google_user'),
+        is_logged_in=is_logged_in,
+        user_name=user_name,
+        user_email=user_email,
     )
 
 
@@ -79,12 +97,24 @@ def login():
 def logout():
     session.pop('google_token', None)
     session.pop('google_user', None)
+
+    flash("You have successfully logged out.")
+
     return redirect(url_for('.index'))
 
 
 @oauth_bp.route('/login/authorized')
 def authorized():
-    resp = oauth_bp.google.authorized_response()
+    try:
+        resp = oauth_bp.google.authorized_response()
+    except OAuthException as e:
+        error_message = "Encountered an error in response from Google: {0}".format(e.data)
+
+        log.exception(error_message)
+        flash(error_message)
+
+        return redirect(url_for('.index'))
+
     next_url = session.pop('next_url', url_for('.index'))
 
     if resp is None:
@@ -94,4 +124,6 @@ def authorized():
     session.permanent = True
     session['google_token'] = (resp['access_token'], '')
     session['google_user'] = oauth_bp.google.get('userinfo').data
+
+    flash("You have successfully authenticated.")
     return redirect(next_url)

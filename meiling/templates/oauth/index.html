@@ -5,30 +5,36 @@ Meiling OAuth Status
 {% endblock %}
 
 {% block content %}
-{% if user %}
-    <div class="row">
-        <div class="page-header">
-            {% if user['name'] %}
-                <h1>Hello, {{ user['name'] }}</h1>
-            {% else %}
-                <h1>Hello, {{ user['email'] }}</h1>
-            {% endif %}
-        </div>
+<div class="row">
+    <div class="page-header">
+        {% if is_logged_in and user_name %}
+            <h1>Hello, {{ user_name }}</h1>
+        {% elif is_logged_in and user_email %}
+            <h1>Hello, {{ user_email }}</h1>
+        {% else %}
+            <h1>Welcome to the Meiling Nginx Proxy</h1>
+        {% endif %}
     </div>
+</div>
 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
     <div class="row">
-        You are logged in as <mark>{{ user['email'] }}</mark>.
+    {% for message in messages %}
+      <div class="alert alert-info" role="alert">{{ message }}</div>
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+{% if is_logged_in %}
+    <div class="row">
+        You are logged in as <mark>{{ user_email }}</mark>.
     </div>
     <div class="row">
         Not you? <a href="{{ url_for('.logout') }}" class="btn btn-warning">Log Out</a>
     </div>
 {% else %}
-    <div class="row">
-        <div class="page-header">
-            <h1>Welcome to the Meiling Nginx Proxy</h1>
-        </div>
-    </div>
-
     <div class="row">
         You are not logged in.
     </div>
