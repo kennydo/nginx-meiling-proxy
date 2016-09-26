@@ -17,6 +17,14 @@ setup(
         'Topic :: Internet',
     ],
     packages=find_packages(exclude=['tests']),
+    package_data={
+        'meiling': [
+            'templates/*.html',
+            'templates/*/*.html',
+        ],
+    },
+    include_package_Data=True,
+    zip_safe=False,
     entry_points={
         'console_scripts': [
         ],
