@@ -13,13 +13,13 @@ from flask import (
 )
 from werkzeug.contrib.fixers import ProxyFix
 
-from meiling.rule_engine.store import RuleStore
+from meiling.rule_engine.stores import RuleStore
 
 log = logging.getLogger(__name__)
 
 MEILING_CONFIG_ENV_VAR_NAME = 'MEILING_CONFIG'
 
-rule_db = RuleStore()
+rule_store = RuleStore()
 
 
 def load_config_from_env_var_path(env_var_name: str) -> Dict[str, Any]:
@@ -48,7 +48,7 @@ def create_app() -> Flask:
     if 'rule_store' not in app.config:
         raise ValueError('Config did not define any rules')
 
-    rule_db.load_config(app.config['rule_store'])
+    rule_store.load_config(app.config['rule_store'])
 
     from meiling.oauth import oauth_bp
     app.register_blueprint(oauth_bp, url_prefix='/oauth')

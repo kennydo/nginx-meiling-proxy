@@ -7,7 +7,7 @@ from flask import (
     session,
 )
 
-from meiling import rule_db
+from meiling import rule_store
 from meiling.rule_engine.models import RequestContext
 
 # Header names that Nginx sends with each `auth_request` request
@@ -67,7 +67,7 @@ def auth_request():
         request_uri=request.headers[NGINX_REQUEST_URI],
     )
 
-    if rule_db.has_access(context):
+    if rule_store.has_access(context):
         return create_200_response(user['email'])
 
     log.warn("Request deemed unauthorized: %s", context)
