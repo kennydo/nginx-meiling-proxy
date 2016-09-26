@@ -1,3 +1,5 @@
+from unittest import mock
+
 import pytest
 
 from meiling.rule_engine import (
@@ -50,3 +52,10 @@ def test_loading_group_with_no_rules_is_ok():
     })
     assert store.has_been_initialized
     assert store.rules == []
+
+
+def test_uninitialized_rule_store_raises_exception():
+    store = stores.RuleStore()
+
+    with pytest.raises(exceptions.UninitializedRuleStore):
+        store.has_access(mock.Mock())
