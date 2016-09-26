@@ -57,7 +57,7 @@ class RuleStore:
         if not rule.request_uri.match(request_context.request_uri):
             return False
 
-        return rule.group in self.group_names_by_member.get(request_context.user_email)
+        return rule.group in self.group_names_by_member[request_context.user_email]
 
     def has_access(self, request_context: 'RequestContext') -> bool:
         if not self.has_been_initialized:
