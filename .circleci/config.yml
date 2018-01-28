@@ -1,0 +1,60 @@
+version: 2
+
+_helpers:
+  - &python_docker_image
+    image: circleci/python:3.6-stretch
+
+  - &install_tox
+    run:
+      name: Install tox
+      command: sudo pip install tox
+
+jobs:
+  lint:
+    docker:
+      - *python_docker_image
+    steps:
+      - checkout
+      - *install_tox
+      - run:
+          name: Run flake8
+          command: tox -e flake8
+
+  test:
+    docker:
+      - *python_docker_image
+    steps:
+      - checkout
+      - *install_tox
+      - run:
+          name: Make test_results dir
+          command: mkdir test_results
+      - run:
+          name: Run tests
+          command: tox -e py36 -- --junit-xml=test_results/pytest_${CIRCLE_BUILD_NUM}_${CIRCLE_NODE_INDEX}.xml
+      - store_test_results:
+          path: test_results
+
+  package:
+    docker:
+      - *python_docker_image
+    steps:
+      - checkout
+      - *install_tox
+      - run:
+          name: Package
+          command: tox -e package
+      - store_artifacts:
+          path: dist
+          destination: dist
+
+workflows:
+  version: 2
+  primary:
+    jobs:
+      - lint
+      - test
+      - package:
+          requires:
+            - lint
+            - test
