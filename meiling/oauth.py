@@ -18,6 +18,8 @@ from flask_oauthlib.client import (
     OAuthException,
 )
 
+from meiling.utils import URL
+
 
 log = logging.getLogger(__name__)
 oauth_bp = Blueprint('oauth_bp', __name__)
@@ -60,35 +62,27 @@ def index():
         user_name = None
         user_email = None
 
+    next_url_string = request.args.get('next_url')
+    next_url = URL.from_string(next_url_string) if next_url_string else None
+
     return render_template(
         'oauth/index.html',
         is_logged_in=is_logged_in,
         user_name=user_name,
         user_email=user_email,
+        next_url=next_url,
     )
 
 
 @oauth_bp.route('/login')
 def login():
-    next_path = request.args.get('next')
-    if next_path:
+    next_url = URL.from_string(request.args.get('next_url'))
+    if next_url:
         # Since passing along the "next" URL as a GET param requires
         # a different callback for each page, and Google requires us to
         # whitelist each allowed callback page, we can't pass it as a GET
         # param. Instead, we sanitize and put into the session.
-        request_components = urlparse(request.url)
-        path = unquote(next_path)
-        if path[0] == '/':
-            # This first slash is unnecessary since we force it in when we
-            # format next_url.
-            path = path[1:]
-
-        next_url = "{scheme}://{netloc}/{path}".format(
-            scheme=request_components.scheme,
-            netloc=request_components.netloc,
-            path=path,
-        )
-        session['next_url'] = next_url
+        session['next_url'] = next_url.to_string()
     return oauth_bp.google.authorize(
         callback=url_for('.authorized', _external=True))
 
@@ -115,15 +109,15 @@ def authorized():
 
         return redirect(url_for('.index'))
 
-    next_url = session.pop('next_url', url_for('.index'))
+    next_url_string = session.pop('next_url', url_for('.index'))
 
     if resp is None:
         flash("You didn't sign in.")
-        return redirect(next_url)
+        return redirect(next_url_string)
 
     session.permanent = True
     session['google_token'] = (resp['access_token'], '')
     session['google_user'] = oauth_bp.google.get('userinfo').data
 
     flash("You have successfully authenticated.")
-    return redirect(next_url)
+    return redirect(next_url_string)
