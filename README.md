@@ -17,7 +17,7 @@ server {
     error_page 401 = @error401;
 
     location @error401 {
-        return 302 https://meiling.example.net/oauth;
+        return 302 https://meiling.example.net/oauth?next_url=$scheme%3A%2F%2F$host$request_uri;
     }
 
     location = /nginx/auth_request {
