@@ -42,7 +42,7 @@ Meiling OAuth Status
     </div>
     <div class="row">
         <p>
-            <a href="{{ url_for('.login', next_url=next_url.to_string()) }}" class="btn btn-success btn-lg">Log In</a>
+            <a href="{{ url_for('.login', next_url=next_url.to_string() if next_url else None) }}" class="btn btn-success btn-lg">Log In</a>
             {% if next_url %}
                 to <mark>{{ next_url.to_string() }}</mark>
             {% endif %}
