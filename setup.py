@@ -6,7 +6,7 @@ from setuptools import (
 
 setup(
     name='meiling',
-    version='0.0.3',
+    version='0.0.4',
     description="Authenticate nginx requests through OAuth",
     url='https://github.com/kennydo/nginx-meiling-proxy',
     author='Kenny Do',
