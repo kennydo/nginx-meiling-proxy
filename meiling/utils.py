@@ -4,6 +4,7 @@ from urllib.parse import (
     urlunsplit,
 )
 
+
 class URL(NamedTuple):
     scheme: str
     host: str
