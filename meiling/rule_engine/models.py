@@ -6,28 +6,25 @@ from typing import (
 )
 
 
-RequestContext = NamedTuple('RequestContext', [
+class RequestContext(NamedTuple):
     # The e-mail address of the user sending the request.
-    ('user_email', str),
+    user_email: str
     # The hostname of the original request
-    ('host', str),
+    host: str
     # The method of the original request
-    ('request_method', str),
+    request_method: str
     # The full URI of the original request. Ex: `/`, `/foo`
-    ('request_uri', str),
-])
+    request_uri: str
 
 
-UserGroup = NamedTuple('UserGroup', [
-    ('name', str),
-    ('members', List[str]),
-])
+class UserGroup(NamedTuple):
+    name: str
+    members: List[str]
 
 
-AccessRule = NamedTuple('AccessRule', [
-    ('host', re._pattern_type),
-    ('request_method', re._pattern_type),
-    ('request_uri', re._pattern_type),
-    ('group', str),
-    ('allow', bool),
-])
+class AccessRule(NamedTuple):
+    host: re.Pattern
+    request_method: re.Pattern
+    request_uri: re.Pattern
+    group: str
+    allow: bool

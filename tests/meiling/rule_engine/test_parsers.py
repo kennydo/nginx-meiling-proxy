@@ -69,4 +69,4 @@ def test_normal_rule_parses_ok(rule_data):
     assert rule.allow == rule_data['allow']
 
     for regex_name in ['host', 'request_method', 'request_uri']:
-        assert isinstance(getattr(rule, regex_name), re._pattern_type)
+        assert isinstance(getattr(rule, regex_name), re.Pattern)
