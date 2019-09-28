@@ -13,7 +13,7 @@ class URL(NamedTuple):
     fragment: str
 
     @classmethod
-    def from_string(cls, url_string: str) -> 'Url':
+    def from_string(cls, url_string: str) -> 'URL':
         split_result = urlsplit(url_string)
         return cls(
             scheme=split_result.scheme,

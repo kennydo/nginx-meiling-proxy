@@ -6,6 +6,10 @@ from meiling.rule_engine.exceptions import (
     InvalidConfig,
     UninitializedRuleStore,
 )
+from meiling.rule_engine.models import (
+    AccessRule,
+    RequestContext,
+)
 
 
 log = logging.getLogger(__name__)
@@ -47,7 +51,7 @@ class RuleStore:
 
         self.has_been_initialized = True
 
-    def does_rule_match_request_context(self, rule: 'AccessRule', request_context: 'RequestContext') -> bool:
+    def does_rule_match_request_context(self, rule: AccessRule, request_context: RequestContext) -> bool:
         if not rule.host.match(request_context.host):
             return False
 
@@ -59,7 +63,7 @@ class RuleStore:
 
         return rule.group in self.group_names_by_member[request_context.user_email]
 
-    def has_access(self, request_context: 'RequestContext') -> bool:
+    def has_access(self, request_context: RequestContext) -> bool:
         if not self.has_been_initialized:
             raise UninitializedRuleStore("Cannot use un-initialized rule store")
 
