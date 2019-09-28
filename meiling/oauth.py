@@ -51,11 +51,9 @@ def index():
         user = session['google_user']
 
         is_logged_in = True
-        user_name = user['name']
         user_email = user['email']
     else:
         is_logged_in = False
-        user_name = None
         user_email = None
 
     next_url_string = request.args.get('next_url')
@@ -64,7 +62,6 @@ def index():
     return render_template(
         'oauth/index.html',
         is_logged_in=is_logged_in,
-        user_name=user_name,
         user_email=user_email,
         next_url=next_url,
     )
